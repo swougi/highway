@@ -32,6 +32,7 @@ class connection
 					return TRUE;
 				}
 			}
+                       die("Could not connect to database :".$this->config['database']);
 		}
 	}
         
@@ -46,14 +47,13 @@ class connection
 		if (strlen($query) > 0)
 		{
 			$this->_connectToDB();
-			$result = mysql_query($query, $this->db) or $this->_throwSQLException('Problem occured running select query : '.$query.' : error : '.mysql_error());
+			$result = mysql_query($query, $this->db) or die('Problem occured running select query : '.$query.' : error : '.mysql_error());
 			if (@mysql_num_rows($result) > 0)
 			{
 				return $result;
 			}
 		}
-
-		return FALSE;
+		
 	}
 	
 	function _selectSingle($query)
@@ -74,7 +74,7 @@ class connection
 		if (strlen($query) > 0)
 		{
 			$this->_connectToDB();
-			mysql_query($query, $this->db) or $this->_throwSQLException('Problem occured running update query : '.$query.' : error : '.mysql_error());
+			mysql_query($query, $this->db) or die('Problem occured running update query : '.$query.' : error : '.mysql_error());
 			return TRUE;
 		}
 		return FALSE;
@@ -85,7 +85,7 @@ class connection
 		if (strlen($query) > 0)
 		{
 			$this->_connectToDB();
-			mysql_query($query, $this->db) or $this->_throwSQLException('Problem occured running insert query : '.$query.' : error : '.mysql_error());
+			mysql_query($query, $this->db) or die('Problem occured running insert query : '.$query.' : error : '.mysql_error());
 			if ( ( $id = mysql_insert_id($this->db) ) != 0)
 			{
                             return $id;
@@ -99,7 +99,7 @@ class connection
 		if (strlen($query) > 0)
 		{
 			$this->_connectToDB();
-			$result = mysql_query($query, $this->db) or $this->_throwSQLException('Problem occured running delete query : '.$query.' : error : '.mysql_error());
+			$result = mysql_query($query, $this->db) or die('Problem occured running delete query : '.$query.' : error : '.mysql_error());
 			return $result;
 		}
 		return FALSE;
@@ -125,7 +125,14 @@ class connection
 	function create_attribute($tablename,$field,$options)
 	{
 		$this->_connectToDB();
-		$query = "ALTER TABLE ".$tablename." ADD ".$field." ".strtoupper($options['type'])."(".$options['length'].")";
+                if($options['key']=="primary")
+                {
+                      $query = "ALTER TABLE ".$tablename." ADD ".$field." SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY";
+                }
+                else
+                {
+                    $query = "ALTER TABLE ".$tablename." ADD ".$field." ".strtoupper($options['type'])."(".$options['length'].") $auto";
+                }
 		//raise($query);
 		$results = mysql_query($query,$this->db);
 	   
@@ -177,11 +184,7 @@ class connection
 	{
 		return $this->run_raw_sql($this->make_raw_sql($query, $params));
 	}
-	function _throwSQLException($message)
-	{
-		throw new SQLException($message);
-	}
-
+	
 	function __destruct()
 	{
 		if (is_resource($this->db))

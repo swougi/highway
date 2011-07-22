@@ -1,9 +1,9 @@
-<a href='<?=garden_path($garden)?>' class='item-link'>
+<a href='<?=blog_path($blog)?>' class='item-link'>
 					<div class='item'>
 						<div class='image'></div>
 						<div class='title'>
 							<h3>
-								<?=$garden->name?>
+								<?=$blog->name?>
 							</h3>
 							<div class='cb'></div>	
 							<div class="info">

@@ -73,7 +73,7 @@ h1,h2,h3
 }
 #application #body #navigation  #item  a:hover
 {
-	background-color:#CCCDA8;
+	background-color:#D4EEF6;
 }
 #application #body #page
 {
@@ -92,8 +92,8 @@ h1,h2,h3
 #application #body #page #header #image
 {
 	color:#FDF9D8;
-	width:70px;
-	height:70px;
+	width:0px;
+	height:0px;
 	float:left;
 	margin-right:20px;
 	
@@ -121,7 +121,7 @@ h1,h2,h3
 }
 #application #body #page #header #title #info a
 {
-	color:#8C802D;
+	color:#0099CC;
 	font-weight:normal;
 	
 }
@@ -231,7 +231,7 @@ h1,h2,h3
 }
 #application #body #page #body .list .item-link:hover .item
 {
-	background-color:#CCCDA8;
+	background-color:#DBF1F8;
 }
 #application #body #page #body .list .item 
 {
@@ -246,8 +246,8 @@ h1,h2,h3
 #application #body #page #body .list .item .image
 {
 	
-	width:50px;
-	height:50px;
+	width:0px;
+	height:0px;
 	float:left;
 	margin-right:20px;
 }
@@ -264,7 +264,7 @@ h1,h2,h3
 }
 #application #body #page #body .list .item  .title .info
 {
-	color:#8C802D;
+	color:#666;
 	margin-top:5px;
 	font-size:12px;
 	

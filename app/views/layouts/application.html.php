@@ -3,7 +3,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<head>
-		<title>webponics - share your garden</title>
+		<title>Highway - example blog app</title>
 		<?=link_stylesheet("base","errors")?>
 		<?=include_javascript("application")?>
 	<head>
@@ -15,8 +15,7 @@
 			</div>
 			<div id='body'>
 				<div id='navigation'>
-					<div id='item'><a href="/gardens">My Garden<div class='brown-arrow'></div></a></div>
-					<div id='item'><a href="/friends">Friend's Garden<div class='brown-arrow'></div></a></div>
+					<div id='item'><a href="<?=blogs_path()?>">My Blogs<div class='brown-arrow'></div></a></div>
 				</div>
 				<div id='page'>
 					 <?if($this->session->flash("error")){?>

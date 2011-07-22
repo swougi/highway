@@ -67,12 +67,12 @@
 		{
 			foreach($this->resource->attributes as $field=>$value)
 			{
-				
+				if($field!='id'){
 				echo $this->label_for($field);
 				echo "<div class='field'>";
 				echo $this->text_field($field);
 				echo "</div>";
-				echo "<div class='cb'></div>";
+				echo "<div class='cb'></div>";}
 				
 			}
 		}

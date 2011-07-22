@@ -1,7 +1,7 @@
 <?class session{
 	
 	
-	function __construct($asddas)
+	function __construct()
 	{
 		$_SESSION['flash'] = array_key_exists('flash',$_SESSION)?$_SESSION['flash']:array();
 	}
