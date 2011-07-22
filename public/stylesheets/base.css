@@ -1,0 +1,308 @@
+body
+{
+	background-color:#999;
+	margin:0;
+	padding:0;
+	font-family:arial;
+	color:#666;
+}
+a
+{
+   color:#666;
+   text-decoration:none;
+}
+h1,h2,h3
+{
+   padding:0;
+   margin:0;
+}
+.cb
+{
+	clear:both;
+}
+#application 
+{
+   width:1024px;
+   height:768px;
+   margin:auto;
+   background-color:#FEFEFE;
+   box-shadow:0px 0px 9px #FEFEFE;
+   border-radius:10px;
+}
+#application #header #logo
+{
+   background-image:url(../images/logo.png);
+   height:90px;
+   width:90px;
+   
+}
+#application #body
+{
+	
+}
+#application #body #navigation
+{
+	background-color:#FBFBFB;
+	border:solid 1px #d1d1d1;
+	width:180px;
+	padding-left:15px;
+	height:678px;
+	box-shadow:3px 0px 3px #d1d1d1;
+	border-radius:10px;
+	float:left;
+}
+#application #body #navigation  #item
+{
+  margin-top:2px;
+}
+#application #body #navigation  #item a
+{
+	background-color:#fff;
+	border:solid 1px #E0E0E0;
+	color:#5E5E5E;	
+	display:block;
+	line-height:50px;
+	height:50px;
+	width:160px;
+	padding-left:20px;
+	border-radius:10px;
+	font-size:14px;
+	
+	letter-spacing:1px;
+	box-shadow:-5px 0px 5px #E0E0E0;
+}
+#application #body #navigation  #item  a:hover
+{
+	background-color:#CCCDA8;
+}
+#application #body #page
+{
+	background-color:#FBFBFB;
+	float:left;
+	height:648px;
+	width:800px;
+	margin-top:5px;
+	border-radius:20px;
+	box-shadow:5px 0px 5px #d1d1d1;
+}
+#application #body #page #header
+{
+	margin:20px;
+}
+#application #body #page #header #image
+{
+	color:#FDF9D8;
+	width:70px;
+	height:70px;
+	float:left;
+	margin-right:20px;
+	
+}
+
+#application #body #page #header #title
+{
+	float:left;
+}
+#application #body #page #header #title h2
+{
+	font-size:23px;
+	color:#666666;
+	border-bottom:solid 1px #4B4A42;
+	width:668px;
+	padding-bottom:5px;
+	margin-top:10px;
+	margin-bottom:5px;
+}
+#application #body #page #header #title #info
+{
+	color:#333;
+	font-weight:bold;
+	margin-top:5px;
+}
+#application #body #page #header #title #info a
+{
+	color:#8C802D;
+	font-weight:normal;
+	
+}
+#application #flash-error
+{
+	background-color:#D4B2B2;
+	border:solid 1px #AD9393;
+	color:#fff;
+	padding:5px;
+	text-align:center;
+	border-top-right-radius:10px;
+}
+
+#application #body #page #body
+{
+	clear:both;
+	margin:20px;
+	
+}
+#application #body #page #body .list .items
+{
+	height:480px;
+	overflow:scroll;
+	overflow-x: hidden;
+}
+#application #body #page #body .list .header
+{
+	background-color:#E0E0E0;
+	color:#666;
+	height:30px;
+	line-height:30px;
+	border-radius:10px;
+	box-shadow:0px 0px 3px #E0E0E0;
+
+}
+#application #body #page #body .list .header .title
+{
+	float:left;
+	font-size:18px;
+	margin-left:20px;
+}
+#application #body #page #body .list .header .tools,
+#application #body #page #body .list .header .tools .tool .label
+{
+    float:left;
+	margin-left:10px;
+	font-size:12px;
+}
+#application #body #page #body .list .header .tools .tool
+{
+   float:left;
+}
+#application #body #page #body .list .header .tools .tool ul
+{
+	padding:0px;
+	margin:0px;
+	list-style:none;
+	float:left;
+	background-color:#E0E0E0;
+	width:100px;
+}
+#application #body #page #body .list .header .tools ul li
+{
+   font-size:12px;
+   color:#000;
+   line-height:30px;
+   cursor:pointer;
+}
+#application #body #page #body .list .header .tools ul li a
+{
+   color:000;
+}
+#application #body #page #body .list .header .tools ul li:hover
+{
+	background-color:#666;
+	color:#fff;
+}
+#application #body #page #body .list .header .tools ul li:hover a
+{
+	color:#333;
+}
+#application #body #page #body .list .header .tools ul li ul li:hover a
+{
+	color:#fff;
+}
+#application #body #page #body .list .header .tools ul li span
+{
+   margin-left:10px;
+    line-height:20px;
+}
+#application #body #page #body .list .header .tools ul li ul
+{
+	display:none;
+	position:absolute;
+	box-shadow:5px 0px 5px #E0E0E0;
+}
+#application #body #page #body .list .header .tools ul li ul li
+{
+	display:block;
+	float:none;
+	padding:3px;
+	
+}
+#application #body #page #body .list .header .tools ul li:hover ul
+{
+   display:block;
+}
+#application #body #page #body .list .item-link:hover .item
+{
+	background-color:#CCCDA8;
+}
+#application #body #page #body .list .item 
+{
+	margin:10px;
+	padding:10px;
+	box-shadow:-5px 0px 5px #E0E0E0;
+	background-color:#FFF;
+	border-radius:10px;
+	font-size:14px;
+	
+}
+#application #body #page #body .list .item .image
+{
+	
+	width:50px;
+	height:50px;
+	float:left;
+	margin-right:20px;
+}
+#application #body #page #body .list .item  .title
+{
+  float:left;
+}
+#application #body #page #body .list .item  .title h3
+{
+	color:#666;
+	border-bottom:solid 1px #4B4A42;
+	width:600px;
+	padding-bottom:5px;
+}
+#application #body #page #body .list .item  .title .info
+{
+	color:#8C802D;
+	margin-top:5px;
+	font-size:12px;
+	
+}
+#application #body #page #body .list .item  .title .info ul
+{
+	list-style:none;
+	padding:0px;
+	margin:0px;
+}
+#application #body #page #body .list .item  .title .info ul li
+{
+	float:left;
+	margin-right:10px;
+}
+#application #body #page #body .list .item  label,
+#application #body #page #body .list .item  .field
+{
+   float:left;
+   width:200px;
+}
+#application #footer
+{
+	color:#fff;
+	font-size:10px;
+	text-align:center;
+	float:left;
+	width:768px;
+	margin-top:5px;
+	color:#333;
+}
+
+input[type=text],
+select
+{
+  background-color:#fff;
+  color:#666;
+  
+  width:180px;
+ 
+}

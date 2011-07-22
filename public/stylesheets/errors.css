@@ -1,0 +1,20 @@
+#error
+{
+	margin:auto;
+	text-align:center;
+	padding:30px;
+	color:#f1f1f1;
+}
+#error h2
+{
+	color:#fff;
+}
+#error-messages ul 
+{
+   list-style-image:url(../images/application/list-style.png);
+}
+input[type='text'].error
+{
+   border:solid 1px #AD9393;
+   background-color:#E3CCCC;
+}
