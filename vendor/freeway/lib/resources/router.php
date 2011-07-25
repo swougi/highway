@@ -1,5 +1,5 @@
 <?
-class router
+class router extends prototype
 {
 	public $routes;
 	static function match($path, $route,$method="GET")
@@ -9,15 +9,19 @@ class router
             $action     = $route[1];
             return array(array($path=>array("controller"=>$controller."_controller.php","action"=>$action,"method"=>$method)));
 	}
-	static function resources($resources,$options=array())
+	static function resources($resources,$args=array())
 	{
-            $routes     = array();
+		    $args = func_get_args();
+			array_shift($args);
+							
+		    $routes     = array();
 			$controller = $resources."_controller.php";
-            $resource   = singularize($resources);
             
+            $resource   = singularize($resources);
 			$path       = "/".$resources;
             $name       = $resources."_path";
-            
+           
+			//TODO: replace eval
 			eval("function ".$name."(){return \"".$path."\";}");
             foreach(array("index"=>"GET","create"=>"POST") as $action=>$method)
             {
@@ -27,8 +31,9 @@ class router
 			//!NEW... NOVUS,NEOS,NEU...add...ADD!!
             foreach(array("add"=>"GET") as $action=>$method)
             {
-				$path = "/".implode("/",array($action,$resource));
+				$path = "/".implode("/",array($resource,$action));
 				$name = implode("_",array($action,$resource,"path"));
+				//TODO: replace eval
 				eval("function ".$name."(){return \"".$path."\";}");
 				$routes[] = array($path=>array("controller"=>$controller,"action"=>$action,"resource"=>$resources,"method"=>$method,"name"=>$name));
             }
@@ -36,30 +41,84 @@ class router
             //set singular paths
             foreach(array("update"=>"POST","show"=>"GET","edit"=>"GET") as $action=>$method)
             {
-				//TODO:add REST
-                    
-				$path = "/".implode("/",array($resource,$action,":id"));
+				//TODO: add REST
+				if( $action=="show")
+				{
+					$path = "/".implode("/",array($resource,":id"));
+				}
+				else{$path = "/".implode("/",array($resource,$action,":id"));}
+                
 				$name = ($action=="show"?"":$action."_").$resource."_path";
-				$routes[] = array($path=>array("controller"=>$controller,"action"=>$action,"resource"=>$resources,"method"=>$method,"name"=>$name));
+				$routes[] = array($path=>array("controller"=>$controller,"action"=>$action,"resource"=>$resource,"method"=>$method,"name"=>$name));
+				//TODO: replace eval
 				eval("function ".$name."("."$"."".$resource."){return str_replace(':id',$".$resource."->id,'".$path."');}");
             }
-
-            //set nested resources
-            if(array_key_exists('collection',$options))
-            {
-				foreach($options['collection'] as $collection)
+			//set nested resources
+			//TODO : clean this shit up
+			if(!empty($args))
+			{
+				
+				foreach($args as $collections)
 				{
-						$path =  "/".implode("/",array($resources,$collection));
-						$name = implode("_",array($collection,$resources,"path"));
-						$routes[] = array($path=>array("controller"=>$controller,"action"=>$collection,"method"=>"GET","name"=>$name));
-						eval("function ".$name."(){return \"".$path."\";}");
+					foreach($collections as $key=>$paths)
+					{
+						
+						foreach($paths as $path=>$collection)
+						{
+							if($key==="collection")
+							{
+								$path =  "/".implode("/",array($resources,$collection));
+								$name = implode("_",array($collection,$resources,"path"));
+								$routes[] = array($path=>array("controller"=>$controller,"type"=>"collection","action"=>$collection,"method"=>"GET","name"=>$name));
+								//TODO: replace eval
+								eval("function ".$name."(){return \"".$path."\";}");
+							}
+							else
+							{
+								$prefix = in_array($collection['action'],array("index","show"))?"":$collection['action']."_";
+								$collection['name'] = $prefix.$resource."_".str_replace($collection['action']."_","",$collection['name']);
+								$path = "/".$resources."/:".$resource."_id".$path;
+								
+								switch ($collection['action'])
+								{
+									case 'add' : $eval_key = "->id";break;
+								
+									case 'create' : $eval_key = "['".singularize($resources)."_id']";break;
+									default:$eval_key ="->".singularize($resources)."_id";
+									
+								}
+											
+								if(in_array($collection['action'],array("show","edit","update")))
+								{
+									$eval_params = "$".$collection['resource']."";
+									$eval_key    =   "->".singularize($resources)."_id";
+									$eval_func   =  "str_replace(':id',$".singularize($collection['resource'])."->id,'".$path."')";
+									$eval_func   =  "return str_replace(':".singularize($resources)."_id',$".singularize($collection['resource']).$eval_key.",".$eval_func.");";
+								}
+								else
+								{
+								    if(key_exists("type",$collection))
+									{
+										$eval_key  =   "->id";	
+									}
+									$eval_func =  "return str_replace(':".singularize($resources)."_id',$".singularize($resources).$eval_key.",'".$path."');";
+									$eval_params = "$"."".singularize($resources);
+									
+								}
+								$eval = ("function ".$collection['name']."(".$eval_params."){".$eval_func."}");
+								$collection['eval'] = $eval;
+								eval($eval);
+								$routes[] = array($path=>$collection);
+							}
+						}
+					}
 				}
-            }
-            return $routes;
+			}
+			return $routes;
 	}
 	function member($args)
 	{
-
+		//TODO: Add
 	}
 	static function collection($collection)
 	{
@@ -80,7 +139,8 @@ class router
                    foreach((array)$route as $key=>$value)
                    {
                          $value['params'] = array();
-						 if(preg_match_all('/\/?(:[a-zA-Z0-9]+)\/?/',$key,$match))
+						 //TODO: add control characters
+						 if(preg_match_all('/\/?(:[a-zA-Z0-9\_]+)\/?/',$key,$match))
                          {
                                 $regex = $key;
 								$match = $match[1];
@@ -110,9 +170,7 @@ class router
 	function route_for($query,$method="GET")
 	{
             $query = $method." ".$query;
-			//die($query);
-			//raise
-            //TODO: improve another stupidy loopidy
+			//TODO: improve another stupidy loopidy
         	foreach($this->routes as $path=>$route)
             {
             	if(preg_match_all($route['regex'],$query,$match) && $route['method']==$method)
@@ -125,26 +183,18 @@ class router
                 }
             }
 	}
+	
 	function run()
 	{
             //TODO: refactor into using a path_for of class method type that can be used for link_to etc
+			//DONE
+			
             $base = explode("/",$_SERVER['PHP_SELF']);
             array_pop($base);
             $path = preg_replace('/.\/$/',"",preg_replace('/\?.*$/', '', str_replace(implode("/",$base),"",$_SERVER['REQUEST_URI'])));
-            $this->route = $this->route_for($path,$_SERVER['REQUEST_METHOD']);
-			if($this->route)
-            {
-                    require_once(DOCROOT."/app/controllers/application_controller.php");
-                    require_once(DOCROOT."/app/controllers/".$this->route["controller"]);
-                    $controller_name = str_replace(".php","",$this->route["controller"]);
-                    new $controller_name($this->route['action']);
-            }
-            else
-            {	
-                    
-					require_once(DOCROOT."/app/controllers/application_controller.php");
-                    new application_controller("404_error");
-            }
+            return $this->route = $this->route_for($path,$_SERVER['REQUEST_METHOD']);
+			
+			
 	}
 }
 

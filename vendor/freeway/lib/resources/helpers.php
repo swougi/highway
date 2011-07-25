@@ -1,11 +1,16 @@
 <?
+   class helpers extends prototype
+   {
+   
+   }
+   
+   //static load internal helpers
    function slash_regex($s)
    {
 		$s = str_replace("/","\/",$s);
 		$s = str_replace("_","\_",$s);
 		return $s;
    }
-   
    
    function humanize($s)
    {
@@ -14,8 +19,8 @@
    
    function pluralize($s)
    {
-	//TODO: regex this
-	return (preg_match("/.s$/",$s))?preg_replace("/.s$/","ses",$s):$s."s";		
+	 //TODO: regex this
+	 return (preg_match("/.s$/",$s))?preg_replace("/.s$/","ses",$s):$s."s";		
    }
    
    function singularize($s)
@@ -47,12 +52,22 @@
    {
       class form_for
 	  {
+		
 		function __construct($resource,$options=array())
 		{
 			$this->resource   = $resource;
 			$this->options    = $options;
 			$this->name = get_class($resource);
-			eval("$"."this->action=".($resource->new_record()?pluralize($this->name):"update_".$this->name)."_path($"."resource);");
+			if(array_key_exists('url',$options))
+			{
+				$this->action = $options['url'];
+			}
+			else
+			{
+				//TODO:: getting lazy now - remove this 
+				eval("$"."this->action=".($resource->new_record()?pluralize($this->name):"update_".$this->name)."_path($"."resource);");
+			}
+			$this->name = get_class($resource);
 			$this->open();
 		}
 		function open()
@@ -67,15 +82,45 @@
 		{
 			foreach($this->resource->attributes as $field=>$value)
 			{
-				if($field!='id'){
 				echo $this->label_for($field);
 				echo "<div class='field'>";
-				echo $this->text_field($field);
+				if(array_key_exists($field,(array)$this->resource->belongs_to))
+				{
+					$model = $this->resource->belongs_to[$field];
+					$this->select($field,$model::find('all'),array('selected'=>$value));	
+				}
+				else
+				{
+					echo $this->text_field($field);
+				}
 				echo "</div>";
-				echo "<div class='cb'></div>";}
+				echo "<div class='cb'></div>";
 				
 			}
 		}
+		function options_from_collection($collection,$args=array())
+		{
+			echo $this->options_for(array_map(function($resource){return array($resource->id=>$resource->name);},$collection),$args);
+		}
+		function select($field,$options=array(),$args=array())
+		{
+			echo "<select name='".$this->name."[".$field."]' >";
+			echo  $this->options_from_collection($options,$args);
+			echo "</select>";
+		}
+		
+		function options_for($options=array(),$args=array())
+		{
+		 	array_key_exists('selected',$args)?"":$args['selected']="";
+			foreach($options as $key=>$option)
+			{
+				foreach($option as $value=>$title)
+				{
+					echo "<option ".($args['selected']==$value?"selected='selected'":"")." value='".$value."'>".$title."</option>";
+				}
+			}
+		}
+		
 		function label_for($field,$text="")
 		{
 			

@@ -1,11 +1,6 @@
 <?
 
-function add_route($path, $route)
-{
-	action_controller::$router->add_route($path, $route);
-}
-
-class action_controller
+class action_controller extends prototype
 {
 	var $layout   = "application";
 	var $action   = "index";
@@ -66,15 +61,17 @@ class action_controller
 					break;
 					case "partial":
 						
-					    $name = str_replace("_","",$args[1]);
+					    $path = explode("/",$args[1]);
+						$name = str_replace("_","",array_pop($path));
 					    if(array_key_exists('collection',$args[2]))
 						{
 							foreach((array)$args[2]['collection'] as $resource){
 							  
-								if(file_exists(DOCROOT."/app/views/".str_replace("_controller","",get_class($this))."/_".$name.".".$format.".php"))
+								$path = $path?$path:array("/".str_replace("_controller","",get_class($this)));
+								$file_name = DOCROOT."/app/views".implode("/",$path)."/_".$name.".".$format.".php";
+								if(file_exists($file_name))
 								{
-									$yield  .= $this->compile(DOCROOT."/app/views/".str_replace("_controller","",get_class($this))."/_".$name.".".$format.".php",
-															  array($name=>&$resource));
+									$yield  .= $this->compile($file_name,array($name=>&$resource));
 								}
 								else
 								{

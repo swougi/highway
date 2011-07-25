@@ -1,0 +1,8 @@
+<?
+	class middleware extends prototype
+	{
+		
+		
+	
+	}
+?>

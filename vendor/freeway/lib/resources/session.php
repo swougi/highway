@@ -1,4 +1,5 @@
-<?class session{
+<?class session extends prototype
+{
 	
 	
 	function __construct()
@@ -18,7 +19,6 @@
 	{
 		unset($_SESSION['flash']);
 	}
-        
 
 
 }?>

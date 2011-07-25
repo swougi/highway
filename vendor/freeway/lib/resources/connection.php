@@ -1,8 +1,6 @@
 <?php
 
-require_once("class.Exceptions.php");
-
-class connection
+class connection extends prototype
 {
 	public $connection;
 
@@ -11,11 +9,11 @@ class connection
 	private $db_passw   = "";
 	private $db_name	= "";
 	private $db		    = "";
-
-        function __construct($config)
+	function __construct($config)
 	{
-            $this->config = $config;
-	    $this->query = "";
+        $this->config = $config;
+		$this->query = "";
+		
 	}
 
 	function _connectToDB()
@@ -32,28 +30,31 @@ class connection
 					return TRUE;
 				}
 			}
-                       die("Could not connect to database :".$this->config['database']);
 		}
 	}
-        
 	function _connection()
 	{
 		$this->_connectToDB();
 		return $this->db;
 	}
 	
+	function sanitize($a)
+	{
+		return mysql_real_escape_string($a,$this->_connection());
+	}
 	function _select($query)
 	{
 		if (strlen($query) > 0)
 		{
 			$this->_connectToDB();
-			$result = mysql_query($query, $this->db) or die('Problem occured running select query : '.$query.' : error : '.mysql_error());
+			$result = mysql_query($query, $this->db) or $this->_throwSQLException('Problem occured running select query : '.$query.' : error : '.mysql_error());
 			if (@mysql_num_rows($result) > 0)
 			{
 				return $result;
 			}
 		}
-		
+
+		return FALSE;
 	}
 	
 	function _selectSingle($query)
@@ -68,13 +69,13 @@ class connection
 		}
 		return false;
 	}
-
-        function _update($query)
+    function _update($query)
 	{
 		if (strlen($query) > 0)
 		{
 			$this->_connectToDB();
-			mysql_query($query, $this->db) or die('Problem occured running update query : '.$query.' : error : '.mysql_error());
+			
+			mysql_query($query, $this->db) or $this->_throwSQLException('Problem occured running update query : '.$query.' : error : '.mysql_error());
 			return TRUE;
 		}
 		return FALSE;
@@ -85,7 +86,7 @@ class connection
 		if (strlen($query) > 0)
 		{
 			$this->_connectToDB();
-			mysql_query($query, $this->db) or die('Problem occured running insert query : '.$query.' : error : '.mysql_error());
+			mysql_query($query, $this->db) or $this->_throwSQLException('Problem occured running insert query : '.$query.' : error : '.mysql_error());
 			if ( ( $id = mysql_insert_id($this->db) ) != 0)
 			{
                             return $id;
@@ -99,12 +100,27 @@ class connection
 		if (strlen($query) > 0)
 		{
 			$this->_connectToDB();
-			$result = mysql_query($query, $this->db) or die('Problem occured running delete query : '.$query.' : error : '.mysql_error());
+			$result = mysql_query($query, $this->db) or $this->_throwSQLException('Problem occured running _delete query : '.$query.' : error : '.mysql_error());
 			return $result;
 		}
 		return FALSE;
 	}
-
+	
+	function fetch_tables()
+	{
+		$query = "SHOW TABLES";
+		return $this->run_raw_sql($query);
+	}
+	function create_table($table_name)
+	{
+		$query = "
+			CREATE TABLE  `".$this->config['database']."`.`".$table_name."` (
+				`id` INT NOT NULL AUTO_INCREMENT ,
+				PRIMARY KEY (  `id` )
+				) ENGINE = INNODB;
+		";
+		return $this->run_raw_sql($query);
+	}
 	function fetch_attributes($tablename)
 	{
 		$this->_connectToDB();
@@ -121,23 +137,13 @@ class connection
 		}
 		die("Cannot fetch attributes: ".$this->error."\n");
 	}
-        
 	function create_attribute($tablename,$field,$options)
 	{
 		$this->_connectToDB();
-                if($options['key']=="primary")
-                {
-                      $query = "ALTER TABLE ".$tablename." ADD ".$field." SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY";
-                }
-                else
-                {
-                    $query = "ALTER TABLE ".$tablename." ADD ".$field." ".strtoupper($options['type'])."(".$options['length'].") $auto";
-                }
-		//raise($query);
+		$query=($options['type']=="primary")?"ALTER TABLE  `".$tablename."` ADD  `".$field."` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST":"ALTER TABLE ".$tablename." ADD ".$field." ".strtoupper($options['type'])."(".$options['length'].")";
 		$results = mysql_query($query,$this->db);
 	   
 	}
-        
 	function remove_attribute($tablename,$field)
 	{
 		$this->_connectToDB();
@@ -145,6 +151,8 @@ class connection
 		$results = mysql_query($query,$this->db);
 		
 	}
+	
+	//TODO: make this final path for all sql (add empty subs)
 	function make_raw_sql($query_string, $subs)
 	{
 		$sub_strings = Array();
@@ -184,7 +192,11 @@ class connection
 	{
 		return $this->run_raw_sql($this->make_raw_sql($query, $params));
 	}
-	
+	function _throwSQLException($message)
+	{
+		throw new SQLException($message);
+	}
+
 	function __destruct()
 	{
 		if (is_resource($this->db))
