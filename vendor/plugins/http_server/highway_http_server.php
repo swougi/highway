@@ -17,10 +17,13 @@ class highway_http_server extends HTTPServer
         
         $doc_root = DOCROOT . '/public';
         
-		if(file_exists($docroot.$uri)) {
+		echo "URI: $uri\n";
+		if($uri != '/' && file_exists($doc_root.$uri)) {
+			echo "returning a file\n";
 			return $this->get_static_response($request, "$doc_root$uri");
 		} else {
-            return $this->get_php_response($request, "$doc_root$uri");			
+			echo "doing routing\n";
+            return $this->get_php_response($request, "$doc_root/index.php");			
 		}
     }        
 }
