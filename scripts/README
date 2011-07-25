@@ -1,0 +1,6 @@
+We need a place to put standalone scripts, like our
+version of spec / cucumber / server / generate etc.
+
+server and generate are built into the 'rails' command
+in rails 3 but I'm sure they are defined elsewhere and
+included somehow.
