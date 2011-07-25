@@ -1,0 +1,5 @@
+Files and Folders in vendor/3rdparty should not be
+automatically included in Highway. Since we dont have 
+something like ruby gems, we need to put stable versions 
+of 3rd party tools somewhere, I think this is as good 
+a place as any.
