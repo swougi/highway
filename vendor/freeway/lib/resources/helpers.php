@@ -33,7 +33,7 @@
    {
       foreach(func_get_args() as $css)
 	  {
-		echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"".PUBLIC_PATH."/stylesheets/".$css.".css\"/>";
+		echo "<link rel=\"stylesheet\" type=\"text/css\" href=\""."/stylesheets/".$css.".css\"/>";
 	  }
    }
    
@@ -41,7 +41,7 @@
    {
 	  foreach(func_get_args() as $js)
 	  {
-		echo "<script type=\"text/javascript\" src=\"".PUBLIC_PATH."/javascript/".$js.".js\"></script>";
+		echo "<script type=\"text/javascript\" src=\""."/javascript/".$js.".js\"></script>";
 	  }
    }
    function link_to($name,$path,$option=array())

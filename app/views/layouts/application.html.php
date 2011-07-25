@@ -26,7 +26,7 @@
 					<?=$yield?>
 				</div>
 				<div id='footer'>
-					powered by <a href='freewayphp.com'>FreeWay</a>
+					powered by <a href='freewayphp.com'>Highway</a>
 				</div>
 			</div>
 			<div class='cb'></div>
