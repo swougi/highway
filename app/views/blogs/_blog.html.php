@@ -8,8 +8,9 @@
 							<div class='cb'></div>	
 							<div class="info">
 								<ul>
-									<li>ranked  20/300</li>
-									<li>health 30/100</li>
+								
+                                                                    <li>Tags : <?=implode(",",array_map(function($tag){return $tag->name;},$blog->tags))?>  </li>
+									
 								</ul>
 							</div>
 						</div>

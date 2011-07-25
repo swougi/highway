@@ -6,31 +6,31 @@
  */
 class model extends prototype{
     
-	public static $includes     = array();
+    public static $includes     = array();
 	
-	public static $table 	     = array();
+    public static $table 	     = array();
     
-	public static $table_name    = "";
+    public static $table_name    = "";
     public static $db_columns    = array();
-	public static $columns       = array();
+    public static $columns       = array();
     public static $attr_accessor = array();
-	public static $connection    = array();
+    public static $connection    = array();
 	  
     var $attributes              = array();
     var $virtual_attributes      = array();
-	var $method_attributes       = array();
+    var $method_attributes       = array();
     var $error_messages          = array();
     var $error_fields            = array();
   	
     function __construct($attributes=array())
     {
-    	$class				= get_called_class();
-		$this->class_name   = $class =  get_called_class();
-		$this->table_name   = $class::$table_name = pluralize($this->class_name);
-		$this->columns      = $class::$columns; 
-		$this->build_default();
-		$this->build($attributes);
-		parent::__construct();
+    	$class = get_called_class();
+        $this->class_name   = $class =  get_called_class();
+        $this->table_name   = $class::$table_name = pluralize($this->class_name);
+        $this->columns      = $class::$columns;
+        $this->build_default();
+        $this->build($attributes);
+        parent::__construct();
 		
    }
     public static function create($attributes)

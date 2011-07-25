@@ -4,6 +4,7 @@ $Application->router->map(
 	
 	
     Router::resources("blogs",
+            Router::resources("tags", Router::collection("search","destroyall")),
             Router::collection("search","destroyall")
     )
 	

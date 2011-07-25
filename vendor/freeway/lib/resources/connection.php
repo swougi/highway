@@ -194,7 +194,7 @@ class connection extends prototype
 	}
 	function _throwSQLException($message)
 	{
-		throw new SQLException($message);
+		die($message);
 	}
 
 	function __destruct()
